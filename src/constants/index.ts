@@ -35,6 +35,8 @@ export const TOKEN_MIGRATOR_ADDRESS = unwrapOrThrow('TOKEN_MIGRATOR_ADDRESS')
 export const BINANCE_TESTNET_CHAINID = 97
 export const BINANCE_MAINNET_CHAINID = 56
 
+export const PEG_SWAP_ADDRESS = '0xBEA1add56D75c6046859124F220fe60192B3B482'
+
 // a list of tokens by chain
 type ChainTokenList = {
   readonly [chainId in ChainId]: Token[]
@@ -81,6 +83,13 @@ export const FUSE_WETH = new Token(
   18,
   'WETH',
   'Wrapped Ether on Fuse'
+)
+export const FUSE_FUSD = new Token(
+  ChainId.FUSE,
+  '0x249BE57637D8B013Ad64785404b24aeBaE9B098B',
+  18,
+  'fUSD',
+  'Fuse Dollar'
 )
 
 const WETH_ONLY: ChainTokenList = {
