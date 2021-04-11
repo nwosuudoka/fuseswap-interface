@@ -35,7 +35,7 @@ export const TOKEN_MIGRATOR_ADDRESS = unwrapOrThrow('TOKEN_MIGRATOR_ADDRESS')
 export const BINANCE_TESTNET_CHAINID = 97
 export const BINANCE_MAINNET_CHAINID = 56
 
-export const PEG_SWAP_ADDRESS = '0xBEA1add56D75c6046859124F220fe60192B3B482'
+export const PEG_SWAP_ADDRESS = '0xF95dD2A962450e8868FE866b8c6Ddfce7B194141'
 
 // a list of tokens by chain
 type ChainTokenList = {
