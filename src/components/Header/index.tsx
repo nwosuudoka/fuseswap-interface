@@ -19,15 +19,16 @@ import { BINANCE_MAINNET_CHAINID, BINANCE_TESTNET_CHAINID } from '../../constant
 
 
 const HeaderFrame = styled.div`
-  height: 90px;
+  height: 70px;
   background-color: ${({ theme }) => theme.bg1};
-  padding: 1.45rem;
+  padding: 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-direction: column;
   width: 100%;
   top: 0;
+  opacity: 0.85;
   position: fixed;
   z-index: 3;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
