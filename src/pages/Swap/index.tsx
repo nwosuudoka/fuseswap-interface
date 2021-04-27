@@ -210,14 +210,14 @@ export default function Swap() {
         const wrappedToken = tokens[key] as WrappedTokenInfo
         if (wrappedToken.isDeprecated) {
           addPopup({deprecated: {
-            token: 'WETH',
+            token: wrappedToken.tokenInfo.symbol,
             currency: wrappedToken,
           }})
           return
         }      
       })
     }
-    
+
     if (approval === ApprovalState.PENDING) {
       setApprovalSubmitted(true)
     }
