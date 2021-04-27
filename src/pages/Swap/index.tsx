@@ -51,6 +51,7 @@ import { WrappedTokenInfo } from '../../state/lists/hooks'
 import TokenMigrationModal from '../../components/TokenMigration'
 import { isTokenOnTokenList } from '../../utils'
 import Maintenance from '../../components/swap/Maintenance'
+import { useAddPopup } from '../../state/application/hooks'
 import styled from 'styled-components'
 
 const ExpandableWrapper = styled("div")`
@@ -200,12 +201,27 @@ export default function Swap() {
   // check if user has gone through approval process, used to show two step buttons, reset on token change
   const [approvalSubmitted, setApprovalSubmitted] = useState<boolean>(false)
 
+  const addPopup = useAddPopup();
+
   // mark when a user has submitted an approval, reset onTokenSelection for input field
   useEffect(() => {
+    if (account){
+      Object.keys(tokens).forEach((key)=>{
+        const wrappedToken = tokens[key] as WrappedTokenInfo
+        if (wrappedToken.isDeprecated) {
+          addPopup({deprecated: {
+            token: 'WETH',
+            currency: wrappedToken,
+          }})
+          return
+        }      
+      })
+    }
+    
     if (approval === ApprovalState.PENDING) {
       setApprovalSubmitted(true)
     }
-  }, [approval, approvalSubmitted])
+  }, [approval, approvalSubmitted, account])
 
   const maxAmountInput: CurrencyAmount | undefined = maxAmountSpend(currencyBalances[Field.INPUT])
   const atMaxAmountInput = Boolean(maxAmountInput && parsedAmounts[Field.INPUT]?.equalTo(maxAmountInput))
