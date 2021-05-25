@@ -17,7 +17,8 @@ import {
   updateUserDeadline,
   updateUserExpertMode,
   updateUserSlippageTolerance,
-  updateCompletedBridgeTransfer as updateCompletedBridgeTransferAction
+  updateCompletedBridgeTransfer as updateCompletedBridgeTransferAction,
+  updateUserMultiHopMode
 } from './actions'
 
 function serializeToken(token: Token): SerializedToken {
@@ -79,6 +80,21 @@ export function useExpertModeManager(): [boolean, () => void] {
   }, [expertMode, dispatch])
 
   return [expertMode, toggleSetExpertMode]
+}
+
+export function useIsMultiHop(): boolean {
+  return useSelector<AppState, AppState['user']['userMultiHopMode']>(state => state.user.userMultiHopMode)
+}
+
+export function useMultiHopModeManager(): [boolean, () => void] {
+  const dispatch = useDispatch<AppDispatch>()
+  const multiHop = useIsMultiHop()
+
+  const toggleMultiHopMode = useCallback(() => {
+    dispatch(updateUserMultiHopMode({ userMultiHopMode: !multiHop }))
+  }, [dispatch, multiHop])
+
+  return [multiHop, toggleMultiHopMode]
 }
 
 export function useUserSlippageTolerance(): [number, (slippage: number) => void] {

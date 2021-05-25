@@ -13,7 +13,8 @@ import {
   updateUserExpertMode,
   updateUserSlippageTolerance,
   updateUserDeadline,
-  updateCompletedBridgeTransfer
+  updateCompletedBridgeTransfer,
+  updateUserMultiHopMode
 } from './actions'
 
 const currentTimestamp = () => new Date().getTime()
@@ -49,6 +50,9 @@ export interface UserState {
   timestamp: number
 
   completedBridgeTransfer: boolean
+
+  // whether to use routing or swap directly
+  userMultiHopMode: boolean
 }
 
 function pairKey(token0Address: string, token1Address: string) {
@@ -64,7 +68,8 @@ export const initialState: UserState = {
   tokens: {},
   pairs: {},
   timestamp: currentTimestamp(),
-  completedBridgeTransfer: false
+  completedBridgeTransfer: false,
+  userMultiHopMode: false
 }
 
 export default createReducer(initialState, builder =>
@@ -135,5 +140,9 @@ export default createReducer(initialState, builder =>
     })
     .addCase(updateCompletedBridgeTransfer, state => {
       state.completedBridgeTransfer = true
+    })
+    .addCase(updateUserMultiHopMode, (state, action) => {
+      state.userMultiHopMode = action.payload.userMultiHopMode
+      state.timestamp = currentTimestamp()
     })
 )

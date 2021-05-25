@@ -27,3 +27,4 @@ export const removeSerializedPair = createAction<{ chainId: number; tokenAAddres
   'user/removeSerializedPair'
 )
 export const updateCompletedBridgeTransfer = createAction('user/updateCompletedBridgeTransfer')
+export const updateUserMultiHopMode = createAction<{ userMultiHopMode: boolean }>('user/updateMultiHopMode')

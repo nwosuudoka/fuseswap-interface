@@ -6,7 +6,8 @@ import {
   useUserSlippageTolerance,
   useExpertModeManager,
   useUserDeadline,
-  useDarkModeManager
+  useDarkModeManager,
+  useMultiHopModeManager
 } from '../../state/user/hooks'
 import TransactionSettings from '../TransactionSettings'
 import { RowFixed, RowBetween } from '../Row'
@@ -135,6 +136,8 @@ export default function SettingsTab() {
 
   const [darkMode, toggleDarkMode] = useDarkModeManager()
 
+  const [multiHop, toggleMultiHop] = useMultiHopModeManager()
+
   // show confirmation view before turning on
   const [showConfirmation, setShowConfirmation] = useState(false)
 
@@ -235,6 +238,15 @@ export default function SettingsTab() {
                 </TYPE.black>
               </RowFixed>
               <Toggle isActive={darkMode} toggle={toggleDarkMode} />
+            </RowBetween>
+            <RowBetween>
+              <RowFixed>
+                <TYPE.black fontSize={14} fontWeight={400} color={theme.text2}>
+                  Toggle Multihops
+                </TYPE.black>
+                <QuestionHelper text="Restricts swaps to direct pairs only" />
+              </RowFixed>
+              <Toggle isActive={multiHop} toggle={toggleMultiHop} />
             </RowBetween>
           </AutoColumn>
         </MenuFlyout>
