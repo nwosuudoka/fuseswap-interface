@@ -69,7 +69,7 @@ export const initialState: UserState = {
   pairs: {},
   timestamp: currentTimestamp(),
   completedBridgeTransfer: false,
-  userMultiHopMode: false
+  userMultiHopMode: true
 }
 
 export default createReducer(initialState, builder =>
