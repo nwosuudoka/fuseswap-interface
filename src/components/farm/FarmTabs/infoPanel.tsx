@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { ButtonPrimary } from '../Button'
-import Modal from '../Modal'
-import Questionmark from '../../assets/svg/questionmark.svg'
+import { ButtonPrimary } from '../../Button'
+import Modal from '../../Modal'
+import { Content, Header, HeaderText, StyledModal } from './modal'
 
 const Container = styled('div')<{ color: string; txt: string }>`
   display: flex;
@@ -65,6 +65,7 @@ const Label = styled('div')`
   > span {
     font-size: 14px;
     font-weight: 500;
+    white-space: pre-wrap;
   }
 `
 const Title = styled('div')<{ txt: string }>`
@@ -77,52 +78,8 @@ const Title = styled('div')<{ txt: string }>`
   line-height: 18px;
   color: ${({ txt }) => txt};
 `
-export const Backdrop = styled.div`
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background: rgba(0, 0, 0, 0.3);
-  z-index: 500;
-`
-export const StyledModal = styled.div`
-  z-index: 100;
-  padding: 24px;
-  background: #242637;
-  position: relative;
-  margin: auto;
-  border-radius: 12px;
-`
-export const Header = styled.div`
-  border-radius: 8px 8px 0 0;
-  display: flex;
-  justify-content: space-between;
-`
 
-export const HeaderText = styled.div`
-  color: #fff;
-  align-self: center;
-  color: lightgray;
-`
-
-export const Content = styled.div`
-  padding-bottom: 15px;
-  max-height: 30rem;
-  overflow-x: hidden;
-  overflow-y: auto;
-  > h1 {
-    font-size: 24px;
-    font-weight: 600;
-  }
-  > p {
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 21px;
-  }
-`
-
-const Item2 = styled('div')`
+const TitleModal = styled(HeaderText)`
   display: flex;
   width: 100%;
   text-align: center;
@@ -130,7 +87,7 @@ const Item2 = styled('div')`
   position: relative;
 `
 
-const IconW = styled('div')`
+const IconModal = styled('div')`
   border-radius: 999px;
   background-color: #ffffff1a;
   height: 48px;
@@ -144,7 +101,16 @@ const IconW = styled('div')`
     position: absolute;
   }
 `
-export default function RewardsAPY(props: any) {
+interface apy {
+  data: string
+  title: string
+  label: string
+  color: string
+  txt: string
+  icon: string
+  apyIcon: string
+}
+export default function InfoPanel(props: apy) {
   const [isOpen, setOpen] = useState(false)
   const content =
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam mi, lorem varius faucibus. Ultricies odio adipiscing integer nunc, quis etiam vehicula lacus. At venenatis elit orci sit diam amet. Vulputate orci id.'
@@ -166,7 +132,7 @@ export default function RewardsAPY(props: any) {
         </IconWrapper>
       </Wrapper>
       <Label>
-        {props.data} &nbsp;<span> {props.label}</span>
+        {Number(props.data).toFixed(2)}<span>{props.label}</span>
       </Label>
       <Title txt={props.txt}>{props.title}</Title>
       <Modal
@@ -179,20 +145,18 @@ export default function RewardsAPY(props: any) {
         <Wrapper aria-modal aria-labelledby={'APY'} tabIndex={-1} role="dialog">
           <StyledModal>
             <Header>
-              <HeaderText>
-                <Item2
-                  onClick={() => {
-                    setOpen(false)
-                  }}
-                >
-                  <IconW>
-                    <img src={Questionmark} width="28px" height="28px" alt="APY Icon"></img>
-                  </IconW>
-                </Item2>
-              </HeaderText>
+              <TitleModal
+                onClick={() => {
+                  setOpen(false)
+                }}
+              >
+                <IconModal>
+                  <img src={props.apyIcon} width="28px" height="28px" alt="APY Icon"></img>
+                </IconModal>
+              </TitleModal>
             </Header>
             <Content>
-              <h1>What does &quot; APY &quot; mean?</h1>
+              <h1>What does &quot; {props.title} &quot; mean?</h1>
               <p>{content}</p>
             </Content>
             <ButtonPrimary

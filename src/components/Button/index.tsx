@@ -16,7 +16,7 @@ const Base = styled(RebassButton)<{
   width: ${({ width }) => (width ? width : '100%')};
   font-weight: 500;
   text-align: center;
-  border-radius: 20px;
+  border-radius: 12px;
   border-radius: ${({ borderRadius }) => borderRadius && borderRadius};
   outline: none;
   border: 1px solid transparent;
@@ -67,10 +67,8 @@ export const ButtonLight = styled(Base)`
   border: 2px solid #9fa3c9;
   box-sizing: border-box;
   border-radius: 12px;
-  color: rgba(159, 163, 201, 1);
-  font-size: 14px;
-  font-weight: 500;
-  background: none;
+  color: ${({ theme }) => theme.text6};
+  background: ${({ theme, disabled }) => (disabled ? theme.bg1 : theme.bg8)};
   &:focus {
     box-shadow: 0 0 0 1pt ${({ theme, disabled }) => !disabled && darken(0.03, theme.primary5)};
     background-color: ${({ theme, disabled }) => !disabled && darken(0.03, theme.primary5)};
@@ -86,7 +84,6 @@ export const ButtonLight = styled(Base)`
     :hover {
       opacity: 0.3;
       cursor: pointer;
-      color: white;
       background-color: red;
       box-shadow: none;
       outline: none;
@@ -312,7 +309,7 @@ export function ButtonDark({ dark, ...rest }: { dark?: boolean } & ButtonProps) 
   }
 }
 
-export function ButtonError({ error, ...rest }: { error?: boolean } & ButtonProps) {
+export function ButtonError({ ...rest }: { error?: boolean } & ButtonProps) {
   return <ButtonLight {...rest} />
 }
 

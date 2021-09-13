@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import Questionmark from '../../assets/svg/questionmark.svg'
-import { ButtonPrimary } from '../Button'
-import Modal from '../Modal'
+import Questionmark from '../../../assets/svg/questionmark.svg'
+import { ButtonPrimary } from '../../Button'
+import Modal from '../../Modal'
 
 const Icon = styled('div')`
   border-radius: 999px;
@@ -16,6 +16,21 @@ const Icon = styled('div')`
     position: absolute;
     top: 20%;
     right: 22%;
+    position: absolute;
+  }
+`
+const Icon2 = styled('div')`
+  border-radius: 999px;
+  background-color: #ffffff1a;
+  height: 24px;
+  width: 24px;
+  position: relative;
+  cursor: pointer;
+  > img {
+    opacity: 0.5;
+    position: absolute;
+    top: -10%;
+    right: -6%;
     position: absolute;
   }
 `
@@ -96,19 +111,12 @@ const Item = styled('div')`
   position: relative;
 `
 
-interface Estimate {
-  estimate: string
-}
-
-export default function EstimatedReward(props: Estimate) {
+export default function RewardCard({ title, content, value }: any) {
   const [isOpen, setOpen] = useState(false)
-  const content =
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam mi, lorem varius faucibus. Ultricies odio adipiscing integer nunc, quis etiam vehicula lacus. At venenatis elit orci sit diam amet. Vulputate orci id.'
-
   return (
     <Container>
       <Wrapper>
-        <span>Your Estimated rewards</span>
+        <span>Your {title}</span>
         <Icon
           onClick={() => {
             setOpen(true)
@@ -118,7 +126,7 @@ export default function EstimatedReward(props: Estimate) {
         </Icon>
       </Wrapper>
       <p>
-        <span>{props.estimate}</span>&nbsp;<span> - WFUSE</span>
+        <span>{value}</span>&nbsp;<span> - WFUSE</span>
       </p>
       <Modal
         maxHeight={90}
@@ -136,14 +144,14 @@ export default function EstimatedReward(props: Estimate) {
                     setOpen(false)
                   }}
                 >
-                  <Icon>
+                  <Icon2>
                     <img src={Questionmark} width="28px" height="28px" alt="Modal Icon"></img>
-                  </Icon>
+                  </Icon2>
                 </Item>
               </HeaderText>
             </Header>
             <Content>
-              <h1>What does &quot; APY &quot; mean?</h1>
+              <h1>What does &quot;{title}&quot; mean?</h1>
               <p>{content}</p>
             </Content>
             <ButtonPrimary

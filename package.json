@@ -8,6 +8,7 @@
     "@ethersproject/experimental": "^5.0.1",
     "@fuseio/fuse-swap-default-token-list": "~2.0.0",
     "@fuseio/fuse-swap-sdk": "^3.1.1",
+    "@fuseio/rewards-sdk": "^0.1.8",
     "@fuseio/token-lists": "^1.1.0",
     "@fuseswap/default-token-list": "^1.0.0",
     "@popperjs/core": "^2.4.4",
@@ -126,5 +127,7 @@
     ]
   },
   "license": "GPL-3.0-or-later",
-  "dependencies": {}
+  "dependencies": {
+    "@fuseio/earn-sdk": "^0.2.0"
+  }
 }
