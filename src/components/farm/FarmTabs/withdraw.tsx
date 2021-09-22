@@ -1,32 +1,36 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { useActiveWeb3React } from '../../../hooks'
 import { ButtonPrimary } from '../../Button'
-import EstimatedRewards from './modal'
+import InfoCard from './farmInfoCard'
 import Percentage from './percentage'
 import styled from 'styled-components'
-import { tryFormatAmount } from '../../../utils'
+import { tryFormatAmount, tryFormatDecimalAmount } from '../../../utils'
 import { TokenAmount } from '@fuseio/fuse-swap-sdk'
 import BigNumber from 'bignumber.js'
 import { useToken } from '../../../hooks/Tokens'
 import { getProgram } from '../../../utils/farm'
 import { useTransactionAdder } from '../../../state/transactions/hooks'
+import { Farm } from '../../../constants/farms'
 
 const Container = styled('div')`
-text-align:left;
-display: flex;
-flex-wrap: wrap;
->div{
-  width: 100%
-  margin-top: 10px;
-}
+  text-align: left;
+  display: flex;
+  flex-wrap: wrap;
+  width: 402px;
+  max-width: 100%;
+  margin: 0 auto;
+
+  > div {
+    width: 100%;
+  }
 `
 
 const Wrapper = styled('div')`
   display: flex;
   flex: wrap;
-  padding-bottom: 14px;
   margin: auto;
   width: 80%;
+  margin-bottom: 4px;
   overflow: hidden;
   text-align: left;
   justify-content: flex-end;
@@ -37,12 +41,15 @@ const InputWrapper = styled('div')`
   flex: wrap;
   margin: auto;
   border-radius: 12px;
-  padding: 12px;
+  margin-bottom: 8px;
+  padding: 0 16px;
   border: 2px solid white;
+  height: 48px;
   width: 80%;
   overflow: hidden;
   text-align: left;
   justify-content: flex-end;
+
   > span {
     margin: auto;
   }
@@ -53,8 +60,8 @@ const Input = styled('input')`
   font-size: 16px;
   background: none;
   border: none;
-  padding: 0.5rem;
   color: white;
+
   :focus {
     outline: none;
   }
@@ -78,31 +85,26 @@ const Balance = styled('div')`
   line-height: 18px;
 `
 
-export default function WithdrawReward({
-  farm
-}: {
-  farm?: {
-    contractAddress: string
-    LPToken: string
-    token0: {
-      symbol: string
-    }
-    token1: {
-      symbol: string
-    }
-    type: string
-    rewardsInfo: any
-    totalStaked: string
-  }
-}) {
+const ClaimButton = styled.button`
+  border: 0;
+  background: ${({ theme }) => theme.bg8};
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 500;
+  cursor: pointer;
+`
+
+export default function WithdrawReward({ farm }: { farm?: Farm }) {
   const { account, library } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
   const [withdrawValue, setWithdrawValue] = useState('0')
   const lpToken = useToken(farm?.LPToken)
 
   const pairSymbol = farm?.token0?.symbol + '-' + farm?.token1?.symbol
-
   const parsedTotalStake = tryFormatAmount(farm?.totalStaked, 18)
+  const accuruedRewards = farm?.rewardsInfo ? tryFormatDecimalAmount(farm?.rewardsInfo[0].accuruedRewards, 18, 2) : '0'
+  const showWithdrawButton = Number(accuruedRewards) > 0
+
   const parsedAmount = useMemo(() => {
     if (lpToken && withdrawValue) {
       const withdrawValueWei = new BigNumber(withdrawValue)
@@ -116,15 +118,32 @@ export default function WithdrawReward({
 
   const withdraw = useCallback(async () => {
     if (!farm || !library || !parsedAmount || !account) return
+    try {
+      const rewardProgram = getProgram(farm?.contractAddress, library?.provider, farm?.type)
+      const response = await rewardProgram.withdraw(parsedAmount.raw.toString(), account)
+      const formattedReponse = { ...response, hash: response.transactionHash }
 
-    const rewardProgram = getProgram(farm?.contractAddress, library?.provider, farm?.type)
-    const response = await rewardProgram.withdraw(parsedAmount.raw.toString(), account)
-    const formattedReponse = { ...response, hash: response.transactionHash }
-
-    addTransaction(formattedReponse, {
-      summary: `Withdrew from ${pairSymbol} farm`
-    })
+      addTransaction(formattedReponse, {
+        summary: `Withdrew from ${pairSymbol} farm`
+      })
+    } catch (e) {
+      console.error(e)
+    }
   }, [account, addTransaction, farm, library, pairSymbol, parsedAmount])
+
+  const claim = useCallback(async () => {
+    if (!farm || !library || !account) return
+
+    try {
+      const rewardProgram = getProgram(farm?.contractAddress, library?.provider, farm?.type)
+      const response = await rewardProgram.withdrawReward(account)
+      const formattedReponse = { ...response, hash: response.transactionHash }
+
+      addTransaction(formattedReponse, { summary: `Rewards Claimed` })
+    } catch (e) {
+      console.error(e)
+    }
+  }, [account, addTransaction, farm, library])
 
   return (
     <Container>
@@ -148,8 +167,13 @@ export default function WithdrawReward({
         <span>{pairSymbol}</span>
       </InputWrapper>
       <Percentage selectPerecentage={setWithdrawValue} value={parsedTotalStake} />
-      <EstimatedRewards title="Accrued Rewards" value={tryFormatAmount(farm?.rewardsInfo[0].accuruedRewards, 18)} />
-      <ButtonPrimary onClick={() => withdraw()}> Withdraw LP Tokens</ButtonPrimary>
+      <InfoCard
+        title="Accrued Rewards"
+        content="Accrued Rewards - Accrued Rewards refers to the total FUSE you've earned for your stake"
+        value={accuruedRewards}
+        button={showWithdrawButton && <ClaimButton onClick={() => claim()}>Claim</ClaimButton>}
+      />
+      <ButtonPrimary onClick={() => withdraw()}>Withdraw</ButtonPrimary>
     </Container>
   )
 }

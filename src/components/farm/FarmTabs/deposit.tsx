@@ -8,7 +8,7 @@ import { Reward, User } from '../../../utils/farm/constants'
 import { useTokenBalance } from '../../../state/wallet/hooks'
 import { RowBetween } from '../../Row'
 import Percentage from './percentage'
-import RewardCard from './modal'
+import FarmInfoCard from './farmInfoCard'
 import styled from 'styled-components'
 import { useToken } from '../../../hooks/Tokens'
 import { TokenAmount } from '@fuseio/fuse-swap-sdk'
@@ -18,21 +18,24 @@ import { Farm } from '../../../constants/farms'
 import { tryFormatDecimalAmount } from '../../../utils'
 
 const Container = styled('div')`
-text-align:left;
-display: flex;
-flex-wrap: wrap;
->div{
-  width: 100%
-  margin-top: 10px;
-}
+  text-align: left;
+  display: flex;
+  flex-wrap: wrap;
+  width: 402px;
+  max-width: 100%;
+  margin: 0 auto;
+
+  > div {
+    width: 100%;
+  }
 `
 
 const Wrapper = styled('div')`
   display: flex;
   flex: wrap;
-  padding-bottom: 14px;
   margin: auto;
   width: 80%;
+  margin-bottom: 4px;
   overflow: hidden;
   text-align: left;
   justify-content: flex-end;
@@ -43,12 +46,15 @@ const InputWrapper = styled('div')`
   flex: wrap;
   margin: auto;
   border-radius: 12px;
-  padding: 12px;
+  margin-bottom: 8px;
+  padding: 0 16px;
   border: 2px solid white;
+  height: 48px;
   width: 80%;
   overflow: hidden;
   text-align: left;
   justify-content: flex-end;
+
   > span {
     margin: auto;
   }
@@ -59,8 +65,8 @@ const Input = styled('input')`
   font-size: 16px;
   background: none;
   border: none;
-  padding: 0.5rem;
   color: white;
+
   :focus {
     outline: none;
   }
@@ -127,9 +133,7 @@ export default function Deposit({ farm }: { farm?: Farm }) {
     return new BigNumber(rewardsPerToken)
       .multipliedBy(new BigNumber(parsedAmount?.raw.toString() ?? '0').plus(farm?.totalStaked ?? '0'))
       .toFixed(6)
-  }, [farm?.totalStaked, parsedAmount, rewardsPerToken])
-
-  console.log(rewardsPerToken, estimatedReward, parsedAmount?.toSignificant(), farm?.totalStaked)
+  }, [farm, parsedAmount, rewardsPerToken])
 
   const [approval, approveCallback] = useApproveCallback(parsedAmount, farm?.contractAddress)
 
@@ -167,7 +171,11 @@ export default function Deposit({ farm }: { farm?: Farm }) {
         <span>{pairSymbol}</span>
       </InputWrapper>
       <Percentage selectPerecentage={setdepositValue} value={lpTokenBalance?.toSignificant()} />
-      <RewardCard title="Estimated Rewards" value={tryFormatDecimalAmount(estimatedReward, 18)} />
+      <FarmInfoCard
+        title="Estimated Rewards"
+        content="Your estimated rewards reflect the amount of $FUSE you are expected to receive by the end of the program assuming there are no changes in deposits"
+        value={tryFormatDecimalAmount(estimatedReward, 18)}
+      />
       {(approval === ApprovalState.NOT_APPROVED || approval === ApprovalState.PENDING) && (
         <RowBetween marginBottom={20}>
           <ButtonPrimary onClick={approveCallback} disabled={approval === ApprovalState.PENDING}>

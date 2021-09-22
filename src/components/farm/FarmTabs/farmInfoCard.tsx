@@ -1,49 +1,49 @@
-import React, { useState } from 'react'
+import React, { ReactNode, useState } from 'react'
 import styled from 'styled-components'
-import Questionmark from '../../../assets/svg/questionmark.svg'
+import Questionmark from '../../../assets/svg/questionmark-purple.svg'
 import { ButtonPrimary } from '../../Button'
 import Modal from '../../Modal'
 
 const Icon = styled('div')`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 999px;
   background-color: #ffffff1a;
   height: 24px;
   width: 24px;
-  position: relative;
   cursor: pointer;
+
   > img {
-    opacity: 0.5;
-    position: absolute;
-    top: 20%;
-    right: 22%;
-    position: absolute;
+    width: 16px;
+    height: 16px;
   }
 `
 const Icon2 = styled('div')`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 999px;
   background-color: #ffffff1a;
-  height: 24px;
-  width: 24px;
+  height: 48px;
+  width: 48px;
   position: relative;
   cursor: pointer;
+
   > img {
-    opacity: 0.5;
-    position: absolute;
-    top: -10%;
-    right: -6%;
-    position: absolute;
+    width: 30px;
+    height: 30px;
   }
 `
 
-const Container = styled('div')`
+const Container = styled.div<{ width?: string }>`
   background: #111219;
   border-radius: 16px;
   display: flex;
-  padding: 14px;
+  padding: 16px;
   flex-direction: column;
-  margin: auto;
   margin-bottom: 24px;
-  width: 100%;
+  width: ${({ width }) => (width ? width : '100%')};
   overflow: hidden;
   text-align: left;
   justify-content: flex-end;
@@ -57,7 +57,7 @@ const Container = styled('div')`
     }
   }
 `
-const Wrapper = styled('div')`
+const Wrapper = styled.div`
   display: flex;
   width: 100%;
   text-align: center;
@@ -67,6 +67,7 @@ const Wrapper = styled('div')`
   margin: 3px;
   position: relative;
 `
+
 export const StyledModal = styled.div`
   z-index: 100;
   padding: 24px;
@@ -92,42 +93,61 @@ export const Content = styled.div`
   max-height: 30rem;
   overflow-x: hidden;
   overflow-y: auto;
+  color: white;
+
   > h1 {
     font-size: 24px;
     font-weight: 600;
+    text-align: left;
   }
   > p {
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 400;
-    line-height: 21px;
+    text-align: left;
   }
 `
 
 const Item = styled('div')`
   display: flex;
   width: 100%;
-  text-align: center;
   justify-content: flex-end;
   position: relative;
 `
 
-export default function RewardCard({ title, content, value }: any) {
+const TextWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+`
+
+type FarmInfoCardProps = {
+  title: string
+  content?: string
+  value?: ReactNode
+  width?: string
+  button?: ReactNode
+}
+
+export default function FarmInfoCard({ title, content, value, width, button }: FarmInfoCardProps) {
   const [isOpen, setOpen] = useState(false)
   return (
-    <Container>
+    <Container width={width}>
       <Wrapper>
         <span>Your {title}</span>
-        <Icon
-          onClick={() => {
-            setOpen(true)
-          }}
-        >
-          <img src={Questionmark} width="14px" height="14px" alt="Question icon"></img>
-        </Icon>
+        {content && (
+          <Icon
+            onClick={() => {
+              setOpen(true)
+            }}
+          >
+            <img src={Questionmark} width="14px" height="14px" alt="Question icon"></img>
+          </Icon>
+        )}
       </Wrapper>
-      <p>
-        <span>{value}</span>&nbsp;<span> - WFUSE</span>
-      </p>
+      <TextWrapper>
+        <span>{value}</span>
+        {button}
+      </TextWrapper>
       <Modal
         maxHeight={90}
         isOpen={isOpen}
@@ -145,7 +165,7 @@ export default function RewardCard({ title, content, value }: any) {
                   }}
                 >
                   <Icon2>
-                    <img src={Questionmark} width="28px" height="28px" alt="Modal Icon"></img>
+                    <img src={Questionmark} alt="Modal Icon"></img>
                   </Icon2>
                 </Item>
               </HeaderText>
