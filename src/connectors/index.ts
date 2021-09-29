@@ -1,4 +1,4 @@
-import { Web3Provider } from '@ethersproject/providers'
+import { Web3Provider, JsonRpcProvider } from '@ethersproject/providers'
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { WalletLinkConnector } from '@web3-react/walletlink-connector'
@@ -54,6 +54,8 @@ export const getChainNetworkLibrary = (chainId: number) => {
       return getNetworkLibrary()
   }
 }
+
+export const fuseReadProvider = new JsonRpcProvider(NETWORK_URL)
 
 export const injectedSupportedChainIds = [ETHEREUM_CHAIN_ID, 122, BINANCE_CHAIN_ID]
 
