@@ -46,7 +46,7 @@ function BridgeInfo() {
         <RowCenter style={{ alignItems: 'flex-start' }}>
           <InfoIcon />
           <TYPE.body fontSize={18} fontWeight={500} textAlign="center" style={{ marginTop: '-3px' }}>
-            To start using FuseSwap please use the bridge to deposit your tokens Or Switch to Fuse{' '}
+            To start using FuseFi please use the bridge to deposit your tokens Or Switch to Fuse{' '}
             <ModalLink onClick={() => setModalOpen(true)}>Click here</ModalLink> to learn how
           </TYPE.body>
         </RowCenter>
