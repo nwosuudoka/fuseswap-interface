@@ -19,9 +19,9 @@ import { RedirectOldRemoveLiquidityPathStructure } from './RemoveLiquidity/redir
 import Swap from './Swap'
 import { RedirectPathToSwapOnly, RedirectToSwap } from './Swap/redirects'
 import { RightFlashIcon, LeftFlashIcon } from '../components/FlashIcon'
-import Bridge from './Bridge'
 import { RedirectToDefault } from './redirects'
 import FusefiBanner from '../components/FuseFiBanner'
+import BridgeCloseNotice from '../components/bridge/BridgeCloseNotice'
 
 const AppWrapper = styled.div`
   display: flex;
@@ -85,7 +85,7 @@ export default function App() {
                 <Route exact path="/add/:currencyIdA/:currencyIdB" component={RedirectDuplicateTokenIds} />
                 <Route exact strict path="/remove/:tokens" component={RedirectOldRemoveLiquidityPathStructure} />
                 <Route exact strict path="/remove/:currencyIdA/:currencyIdB" component={RemoveLiquidity} />
-                <Route exact strict path="/bridge" component={Bridge} />
+                <Route exact strict path="/bridge" component={BridgeCloseNotice} />
                 <Route component={RedirectToDefault} />
               </Switch>
             </Web3ReactManager>
