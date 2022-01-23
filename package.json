@@ -3,6 +3,9 @@
   "description": "Uniswap Interface",
   "homepage": ".",
   "private": true,
+  "engine": {
+    "node": "17.4.0"
+  },
   "devDependencies": {
     "@ethersproject/experimental": "^5.0.1",
     "@fuseio/fuse-swap-default-token-list": "~2.0.0",
