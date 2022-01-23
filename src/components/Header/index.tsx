@@ -6,7 +6,7 @@ import { ExternalLink as ExternalLinkIcon } from 'react-feather'
 
 import styled from 'styled-components'
 
-import Logo from '../../assets/images/logo.png'
+import Logo from '../../assets/images/logo2.png'
 import { useActiveWeb3React } from '../../hooks'
 import { useETHBalances } from '../../state/wallet/hooks'
 
